@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<users>
+  <user>
+    <userId>1</userId>
+    <userType>customer</userType>
+    <name>Harry</name>
+    <email>h.potter@hogwarts.uk</email>
+    <username>h.potter@hogwarts.uk</username>
+    <password>CmyCIDxh2CwBOGmCDjntABjQhBT8et0T6MGKrVelNzU=</password>
+  </user>
+  <user>
+    <userId>2</userId>
+    <userType>customer</userType>
+    <name>Ron</name>
+    <email>ronrules345@burrow.uk</email>
+    <username>ronrules345@burrow.uk</username>
+    <password>ec2M3Sl+R38LTyyrdxu74HJzvDw1nBf+PGJqYKVZ8ak=</password>
+  </user>
+  <user>
+    <userId>2565</userId>
+    <userType>service</userType>
+    <name>Penelope</name>
+    <username>PenelopeSandford</username>
+    <password>vTSflVnV2XOG8W2YEP+pH/p8wYHYWap+grviOMuqDII=</password>
+  </user>
+  <user>
+    <userId>4567</userId>
+    <userType>admin</userType>
+    <name>Albus</name>
+    <username>AlbusDumbledore</username>
+    <password>xJ+2+z6Zh2xs5/pB1Rfy0fzvltZieB/Qlp5HTpQLbnQ=</password>
+  </user>
+</users>

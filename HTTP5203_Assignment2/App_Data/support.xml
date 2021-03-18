@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<tickets>
+  <ticket>
+    <ticketId>1001</ticketId>
+    <userId>1</userId>
+    <product>
+      <productId>124</productId>
+      <name>Dress Robes</name>
+    </product>
+    <subject>Tear in hem.</subject>
+    <status>open</status>
+  </ticket>
+  <ticket>
+    <ticketId>1002</ticketId>
+    <userId>2</userId>
+    <product>
+      <productId>234</productId>
+      <name>Chocolate Frog</name>
+    </product>
+    <subject>Did not come to life.</subject>
+    <status>closed</status>
+    <messages>
+      <messageId>501</messageId>
+      <timestamp>2011-03-22+11:34</timestamp>
+      <userId>2565</userId>
+      <content>Hello, Ron, how can I help you?</content>
+    </messages>
+    <messages>
+      <messageId>502</messageId>
+      <timestamp>2011-03-22+11:35</timestamp>
+      <userId>2</userId>
+      <content>Yes, I was expecting my frog to jump away and it didn&#x27;t.</content>
+    </messages>
+    <messages>
+      <messageId>503</messageId>
+      <timestamp>2011-03-22+11:36</timestamp>
+      <userId>2565</userId>
+      <content>Does it really matter since you&#x27;re going to eat it?</content>
+    </messages>
+    <messages>
+      <messageId>504</messageId>
+      <timestamp>2011-03-22+11:37</timestamp>
+      <userId>2</userId>
+      <content>No, I suppose not. Alright, thanks for your help!</content>
+    </messages>
+    <messages>
+      <messageId>505</messageId>
+      <timestamp>2011-03-22+11:38</timestamp>
+      <userId>2565</userId>
+      <content>You&#x27;re welcome. Enjoy your frog!</content>
+    </messages>
+  </ticket>
+</tickets>
