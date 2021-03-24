@@ -18,6 +18,10 @@ namespace HTTP5203_Assignment2.Models
             get; set;
         }
 
+        public DateTime timestamp {
+            get; set; 
+        }
+
         public int userId {
             get; set;
         }
