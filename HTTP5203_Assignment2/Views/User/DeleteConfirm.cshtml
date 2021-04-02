@@ -1,0 +1,45 @@
+﻿@model HTTP5203_Assignment2.Models.ViewModels.ViewUser
+
+<h3>Are you sure you want to delete this user?</h3>
+<div>
+  <hr />
+  <dl class="row">
+    <dt class="col-sm-2">
+      @Html.DisplayNameFor( model => model.user.userId )
+    </dt>
+    <dd class="col-sm-10">
+      @Html.DisplayFor( model => model.user.userId )
+    </dd>
+    <dt class="col-sm-2">
+      @Html.DisplayNameFor( model => model.user.name )
+    </dt>
+    <dd class="col-sm-10">
+      @Html.DisplayFor( model => model.user.name )
+    </dd>
+    <dt class="col-sm-2">
+      @Html.DisplayNameFor( model => model.user.userName )
+    </dt>
+    <dd class="col-sm-10">
+      @Html.DisplayFor( model => model.user.userName )
+    </dd>
+    <dt class="col-sm-2">
+      @Html.DisplayNameFor( model => model.user.userType )
+    </dt>
+    <dd class="col-sm-10">
+      @Html.DisplayFor( model => model.user.userType )
+    </dd>
+    @if( Model.user.userType == HTTP5203_Assignment2.Models.User.UserType.customer ) {
+      <dt class="col-sm-2">
+        @Html.DisplayNameFor( model => model.email )
+      </dt>
+      <dd class="col-sm-10">
+        @Html.DisplayFor( model => model.email )
+      </dd>
+    }
+  </dl>
+
+  <form asp-action="Delete" asp-route-id="@Model.user.userId">
+    <input type="submit" value="Delete" class="btn btn-danger" /> |
+    <a asp-action="Index">Back to List</a>
+  </form>
+</div>

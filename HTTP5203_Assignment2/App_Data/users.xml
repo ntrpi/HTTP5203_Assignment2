@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <users>
   <user>
     <userId>1</userId>
     <userType>customer</userType>
     <name>Harry</name>
     <email>h.potter@hogwarts.uk</email>
-    <username>h.potter@hogwarts.uk</username>
+    <userName>h.potter@hogwarts.uk</userName>
     <password>CmyCIDxh2CwBOGmCDjntABjQhBT8et0T6MGKrVelNzU=</password>
   </user>
   <user>
@@ -13,21 +13,29 @@
     <userType>customer</userType>
     <name>Ron</name>
     <email>ronrules345@burrow.uk</email>
-    <username>ronrules345@burrow.uk</username>
+    <userName>ronrules345@burrow.uk</userName>
     <password>ec2M3Sl+R38LTyyrdxu74HJzvDw1nBf+PGJqYKVZ8ak=</password>
   </user>
   <user>
     <userId>2565</userId>
     <userType>service</userType>
     <name>Penelope</name>
-    <username>PenelopeSandford</username>
+    <userName>PenelopeSandford</userName>
     <password>vTSflVnV2XOG8W2YEP+pH/p8wYHYWap+grviOMuqDII=</password>
   </user>
   <user>
     <userId>4567</userId>
     <userType>admin</userType>
     <name>Albus</name>
-    <username>AlbusDumbledore</username>
+    <userName>AlbusDumbledore</userName>
     <password>xJ+2+z6Zh2xs5/pB1Rfy0fzvltZieB/Qlp5HTpQLbnQ=</password>
+  </user>
+  <user>
+    <userId>4569</userId>
+    <name>Brian</name>
+    <userName>Brian</userName>
+    <password>a30fa33279f52c4fecbbf18b470daaee4a728d535e65d5a7ed3c6baf73233125</password>
+    <userType>customer</userType>
+    <email>brian@foo</email>
   </user>
 </users>

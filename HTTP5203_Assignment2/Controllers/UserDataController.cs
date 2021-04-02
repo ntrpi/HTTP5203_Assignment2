@@ -6,13 +6,36 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using HTTP5203_Assignment2.Models;
 using HTTP5203_Assignment2.Models.ViewModels;
+using User = HTTP5203_Assignment2.Models.User;
+using UserType = HTTP5203_Assignment2.Models.User.UserType;
+using System.IO;
+using System.Text;
+using System.Security.Cryptography;
 
 namespace HTTP5203_Assignment2.Controllers
 {
+    // Copied ferom https://www.c-sharpcorner.com/article/compute-sha256-hash-in-c-sharp/
+    // on 2021/04/02
     public class UserDataController: XmlDataController
     {
-        private int maxUserId;
-        public UserDataController() : base( "/App_Data", "users.xml")
+        public static string getHashed( string rawData )
+        {
+            // Create a SHA256   
+            using( SHA256 sha256Hash = SHA256.Create() ) {
+                // ComputeHash - returns byte array  
+                byte[] bytes = sha256Hash.ComputeHash( Encoding.UTF8.GetBytes( rawData ) );
+
+                // Convert byte array to a string   
+                StringBuilder builder = new StringBuilder();
+                for( int i = 0; i < bytes.Length; i++ ) {
+                    builder.Append( bytes[ i ].ToString( "x2" ) );
+                }
+                return builder.ToString();
+            }
+        }
+
+        private static int maxUserId;
+        public UserDataController() : base( "\\App_Data", "\\users.xml")
         {
             foreach( XElement e in getElementsWithName( "user" ) ) {
                 int userId = getUserId( e );
@@ -29,12 +52,20 @@ namespace HTTP5203_Assignment2.Controllers
 
         User getUserFromXml( XElement userXml )
         {
-            return new User {
-                userId = (int) userXml.Element( "userId" ),
-                name = userXml.Element( "name" ).ToString(),
-                userName = userXml.Element( "userName" ).ToString(),
-                password = userXml.Element( "password" ).ToString()
-            };
+            UserType userType = UserHelper.getType( userXml.Element( "userType" ).Value );
+
+            User user = UserHelper.getUserOfType( userType ) ;
+
+            user.userId = (int) userXml.Element( "userId" );
+            user.name = userXml.Element( "name" ).Value;
+            user.userName = userXml.Element( "userName" ).Value;
+            user.password = userXml.Element( "password" ).Value;
+            user.userType = userType;
+
+            XElement email = userXml.Element( "email" );
+            string emailString = email != null ? email.Value : "";
+            UserHelper.addEmail( user, emailString );
+            return user;
         }
 
         public IEnumerable<User> getUsers()
@@ -42,6 +73,27 @@ namespace HTTP5203_Assignment2.Controllers
             List<User> users = new List<User>();
             foreach( XElement e in getElementsWithName( "user" ) ) {
                 users.Add( getUserFromXml( e ) );
+            }
+            return users;
+        }
+
+        public IEnumerable<User> getUsersByType( User.UserType type )
+        {
+            List<User> users = new List<User>();
+            // Use 3 to indicate both admin and service as "support". It is not a
+            // value in the enum.
+            if( (int) type == 3 ) {
+                foreach( XElement e in getElementsWithChild( "user", "userType", "admin" ) ) {
+                    users.Add( getUserFromXml( e ) );
+                }
+                foreach( XElement e in getElementsWithChild( "user", "userType", "service" ) ) {
+                    users.Add( getUserFromXml( e ) );
+                }
+            } else {
+                string userType = Enum.GetName( typeof( User.UserType ), type );
+                foreach( XElement e in getElementsWithChild( "user", "userType", userType ) ) {
+                    users.Add( getUserFromXml( e ) );
+                }
             }
             return users;
         }
@@ -58,17 +110,27 @@ namespace HTTP5203_Assignment2.Controllers
 
         private void modifyXml( User user, XElement element )
         {
+            // TODO: ID shouldn't change.
             element.SetElementValue( "userId", user.userId );
-            element.SetElementValue( "name", user.name );
-            element.SetElementValue( "userName", user.userName );
-            element.SetElementValue( "password", user.password );
 
-            if( user is Customer ) {
-                element.SetElementValue( "email", (user as Customer).email );
+            if( user.name != null ) {
+                element.SetElementValue( "name", user.name );
             }
 
-            if( user is Support ) {
-                element.SetElementValue( "type", ( user as Support ).type );
+            if( user.userName != null ) {
+                // TODO: check unique.
+                element.SetElementValue( "userName", user.userName );
+            }
+
+            if( user.password != null ) {
+                element.SetElementValue( "password", user.password );
+            }
+            
+            element.SetElementValue( "userType", UserHelper.getType( user.userType ) );
+
+            string email = UserHelper.getEmail( user );
+            if( email != null && email.Length > 0 ) {
+                element.SetElementValue( "email", email );
             }
         }
 
@@ -79,17 +141,21 @@ namespace HTTP5203_Assignment2.Controllers
             updateFile();
         }
 
-        public void addUser( User user )
+        public int addUser( User user )
         {
             XElement element = addElement( "user" );
-            user.userId = maxUserId++;
+            maxUserId++;
+            user.userId = maxUserId;
             modifyXml( user, element );
             updateFile();
+            return user.userId;
         }
 
-        public void deleteUser( User user )
+        public void deleteUser( int userId )
         {
-            deleteElement( "user", "userId", user.userId.ToString() );
+            XElement element = getElementWithChildValue( "user", "userId", userId.ToString() );
+            element.Remove();
+            updateFile();
         }
     }
 }

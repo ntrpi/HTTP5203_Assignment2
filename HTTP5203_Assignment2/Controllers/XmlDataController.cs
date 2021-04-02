@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
@@ -14,7 +15,7 @@ namespace HTTP5203_Assignment2.Controllers
         
         public XmlDataController( string path, string fileName )
         {
-            fullPath = Request.PathBase + path + fileName;
+            fullPath = Directory.GetCurrentDirectory() + path + fileName;
             if( System.IO.File.Exists( fullPath ) ) {
                 root = XElement.Load( fullPath );
             }
@@ -30,6 +31,23 @@ namespace HTTP5203_Assignment2.Controllers
             return getElementsWithName( name ).First();
         }
 
+        public IEnumerable<XElement> getElementsWithChild( string parent, string child, string value )
+        {
+            return root
+                .Descendants( child )
+                .Where( c => c.Value == value )
+                .SelectMany( c => c.Ancestors( parent ) )
+                .ToList();
+        }
+
+        public IEnumerable<XElement> getElementsWithChild( string parent, string child )
+        {
+            return root
+                .Descendants( child )
+                .SelectMany( c => c.Ancestors( parent ) )
+                .ToList();
+        }
+
         public XElement addElement( string name )
         {
             XElement element = new XElement( name );
@@ -39,7 +57,7 @@ namespace HTTP5203_Assignment2.Controllers
 
         public XElement getElementWithChildValue( string parentName, string elementName, string elementValue )
         {
-            return root.Descendants( parentName ).Elements( elementName ).Where( x => x.Value == elementValue ).First();
+            return root.Descendants( parentName ).Elements( elementName ).Where( x => x.Value == elementValue ).First().Parent;
         }
 
         public void updateFile()

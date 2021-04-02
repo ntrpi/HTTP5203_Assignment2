@@ -1,0 +1,48 @@
+﻿@model HTTP5203_Assignment2.Models.User
+@{
+    var customer = HTTP5203_Assignment2.Models.UserHelper.getCustomer( Model );
+}
+
+  <h4>Customer</h4>
+  <hr />
+  <div class="row">
+    <div class="col-md-4">
+      <form asp-action="Edit" asp-route-id="@Model.userId">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input asp-for="userId" type="hidden" class="form-control" />
+        <div class="form-group">
+          <label asp-for="name" class="control-label"></label>
+          <input asp-for="name" class="form-control" />
+          <span asp-validation-for="name" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+          <label asp-for="userName" class="control-label"></label>
+          <input asp-for="userName" class="form-control" />
+          <span asp-validation-for="userName" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+          <label asp-for="userType" class="control-label"></label>
+          <input asp-for="userType" class="form-control" />
+          <span asp-validation-for="userType" class="text-danger"></span>
+        </div>
+        @if( customer != null ) {
+          <div class="form-group">
+            <label asp-for="@customer.email" class="control-label"></label>
+            <input type="email" value="@customer.email" name="email" id="email" class="form-control" />
+            <span asp-validation-for="@customer.email" class="text-danger"></span>
+          </div>
+        }
+        <div class="form-group">
+          <input type="submit" value="Save" class="btn btn-primary" />
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div>
+    <a asp-action="Index">Back to List</a>
+  </div>
+
+  @section Scripts {
+    @{await Html.RenderPartialAsync( "_ValidationScriptsPartial" );}
+  }
