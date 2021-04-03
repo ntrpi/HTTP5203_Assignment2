@@ -1,59 +1,69 @@
 ﻿@model IEnumerable<HTTP5203_Assignment2.Models.Ticket>
 
 <p>
-    <a asp-action="Create">Create New</a>
+  <a asp-action="Create">Create New</a>
 </p>
 <table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.ticketId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.timestamp)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.userId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.subject)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.status)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.productId)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ticketId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.timestamp)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.userId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.subject)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.status)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.productId)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.ticketId }) |
-                @Html.ActionLink("Details", "Details", new { id = item.ticketId }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.ticketId })
-            </td>
-        </tr>
-}
-    </tbody>
+  <thead>
+    <tr>
+      <th>
+        @Html.DisplayNameFor( model => model.ticketId )
+      </th>
+      <th>
+        @Html.DisplayNameFor( model => model.timestamp )
+      </th>
+      <th>
+        @Html.DisplayNameFor( model => model.userId )
+      </th>
+      <th>
+        @Html.DisplayNameFor( model => model.subject )
+      </th>
+      <th>
+        @Html.DisplayNameFor( model => model.status )
+      </th>
+      <th>
+        @Html.DisplayNameFor( model => model.productId )
+      </th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    @foreach( var item in Model ) {
+      <tr>
+        <td>
+          @Html.DisplayFor( modelItem => item.ticketId )
+        </td>
+        <td>
+          @Html.DisplayFor( modelItem => item.timestamp )
+        </td>
+        <td>
+          @Html.DisplayFor( modelItem => item.userId )
+        </td>
+        <td>
+          @Html.DisplayFor( modelItem => item.subject )
+        </td>
+        <td>
+          @Html.DisplayFor( modelItem => item.status )
+        </td>
+        <td>
+          @Html.DisplayFor( modelItem => item.productId )
+        </td>
+        <td>
+          @Html.ActionLink( "Edit", "Edit", new {
+            id = item.ticketId
+          } ) |
+          @Html.ActionLink( "Details", "Details", new {
+            id = item.ticketId
+          } ) |
+          @Html.ActionLink( "Delete", "DeleteConfirm", new {
+            id = item.ticketId
+          } )
+        </td>
+      </tr>
+    }
+  </tbody>
 </table>
+<div>
+  @Html.ActionLink( "Back to Home", "Index", "Home" )
+</div>
+

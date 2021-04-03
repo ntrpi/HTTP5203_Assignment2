@@ -21,9 +21,13 @@
           <span asp-validation-for="userName" class="text-danger"></span>
         </div>
         <div class="form-group">
-          <label asp-for="userType" class="control-label"></label>
-          <input asp-for="userType" class="form-control" />
-          <span asp-validation-for="userType" class="text-danger"></span>
+          @{
+            var currentType = HTTP5203_Assignment2.Models.UserHelper.getType( Model.userType );
+          }
+          <label asp-for="userType" class="control-label">Current status: @currentType</label>
+          <input name="currentType" id="currentType" type="hidden" value="@currentType" />
+          <select asp-for="userType" class="form-control" asp-items="Html.GetEnumSelectList<HTTP5203_Assignment2.Models.User.UserType>()">
+          </select>
         </div>
         @if( customer != null ) {
           <div class="form-group">

@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<products>
+  <product>
+    <productId>124</productId>
+    <name>Dress Robes</name>
+  </product>
+  <product>
+    <productId>234</productId>
+    <name>Chocolate Frog</name>
+  </product>
+  <product>
+    <productId>235</productId>
+    <name>Wand</name>
+  </product>
+  <product>
+    <productId>237</productId>
+    <name>Monster Book of Monsters</name>
+  </product>
+  <product>
+    <productId>238</productId>
+    <name>Quill and Ink Set</name>
+  </product>
+</products>

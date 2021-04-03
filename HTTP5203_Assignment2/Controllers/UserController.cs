@@ -54,6 +54,11 @@ namespace HTTP5203_Assignment2.Controllers
             if( collection.ContainsKey( "userType" ) ) {
                 UserType userType = UserHelper.getType( collection[ "userType" ] );
                 user = UserHelper.getUserOfType( userType );
+                if( UserHelper.isCustomer( user ) ) {
+                    if( collection.ContainsKey( "email" ) ) {
+                        UserHelper.addEmail( user, collection[ "email" ] );
+                    }
+                }
             } else {
                 user = new User();
             }
@@ -69,9 +74,6 @@ namespace HTTP5203_Assignment2.Controllers
             }
             if( collection.ContainsKey( "password" ) ) {
                 user.password = UserDataController.getHashed( collection[ "password" ] );
-            }
-            if( collection.ContainsKey( "email" ) ) {
-                UserHelper.addEmail( user, collection[ "email" ] );
             }
             return user;
         }
@@ -118,6 +120,12 @@ namespace HTTP5203_Assignment2.Controllers
             User user = getUserFromCollection( collection );
             data.updateUser( user );
             try {
+                if( UserHelper.isCustomer( user ) ) {
+                    return RedirectToAction( nameof( AddEmail ), new {
+                        id = user.userId
+                    } );
+                }
+
                 return RedirectToAction( nameof( Details ), new {
                     id = user.userId
                 } );

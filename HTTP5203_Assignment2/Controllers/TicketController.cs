@@ -13,6 +13,7 @@ namespace HTTP5203_Assignment2.Controllers
     {
         private TicketDataController data = TicketDataController.getTicketDataController();
         private static UserDataController userData = UserDataController.getUserDataController();
+        private static ProductDataController productData = ProductDataController.getProductDataController();
 
         // GET: TicketController
         public ActionResult Index()
@@ -23,14 +24,18 @@ namespace HTTP5203_Assignment2.Controllers
         // GET: TicketController/Details/5
         public ActionResult Details( int id )
         {
-            return View( data.getTicket( id ) );
+            ViewTicket viewTicket = new ViewTicket();
+            viewTicket.ticket = data.getTicket( id );
+            viewTicket.user = userData.getUser( viewTicket.ticket.userId );
+            viewTicket.messages = getViewMessages( id );
+            return View( viewTicket );
         }
 
         // GET: TicketController/Create
         public ActionResult Create()
         {
             UpdateTicket updateTicket = new UpdateTicket();
-            updateTicket.products = TicketDataController.getProducts();
+            updateTicket.products = productData.getProducts();
             updateTicket.users = userData.getUsers();
             return View( updateTicket );
         }
@@ -86,7 +91,7 @@ namespace HTTP5203_Assignment2.Controllers
         {
             UpdateTicket updateTicket = new UpdateTicket();
             updateTicket.ticket = data.getTicket( id );
-            updateTicket.products = TicketDataController.getProducts();
+            updateTicket.products = productData.getProducts();
             updateTicket.users = userData.getUsers();
             return View( updateTicket );
         }
@@ -124,5 +129,109 @@ namespace HTTP5203_Assignment2.Controllers
                 return View();
             }
         }
+
+        private IEnumerable<ViewMessage> getViewMessages( int id )
+        {
+            IEnumerable<Message> messages = data.getMessages( id );
+            List<ViewMessage> viewMessages = new List<ViewMessage>();
+            foreach( Message m in messages ) {
+                viewMessages.Add( new ViewMessage {
+                    message = m,
+                    user = userData.getUser( m.userId )
+                } );
+            }
+            return viewMessages;
+        }
+
+        // id = ticket id
+        public ActionResult Messages( int id )
+        {
+            return View( data.getMessages( id ) );
+        }
+
+        public ActionResult MessageDetails( int id )
+        {
+            return View( data.getMessage( id ) );
+        }
+
+        public ActionResult CreateMessage()
+        {
+            return View();
+        }
+
+        private Message getMessageFromCollection( IFormCollection collection )
+        {
+            Message message = new Message();
+            if( collection.ContainsKey( "messageId" ) ) {
+                message.messageId = Int32.Parse( collection[ "messageId" ] );
+            }
+            message.timestamp = DateTime.Now;
+
+            if( collection.ContainsKey( "userId" ) ) {
+                message.userId = Int32.Parse( collection[ "userId" ] );
+            }
+
+            if( collection.ContainsKey( "ticketId" ) ) {
+                message.ticketId = Int32.Parse( collection[ "ticketId" ] );
+            }
+
+            if( collection.ContainsKey( "content" ) ) {
+                message.content = collection[ "content" ];
+            }
+            return message;
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateMessage( IFormCollection collection )
+        {
+            Message message = getMessageFromCollection( collection );
+            message.messageId = data.addMessage( message );
+            try {
+                return RedirectToAction( nameof( Messages ), new {
+                    id = message.ticketId
+                } );
+            } catch {
+                return View();
+            }
+        }
+
+        public ActionResult EditMessage( int id )
+        {
+            return View( data.getMessage( id ) );
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditMessage( int id, IFormCollection collection )
+        {
+            Message message = getMessageFromCollection( collection );
+            message.messageId = data.updateMessage( message );
+            try {
+                return RedirectToAction( nameof( MessageDetails ), new {
+                    id = message.messageId
+                } );
+            } catch {
+                return View();
+            }
+        }
+
+        public ActionResult DeleteMessageConfirm( int id )
+        {
+            return View( data.getMessage( id ) );
+        }
+
+       [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteMessage( int id, IFormCollection collection )
+        {
+            data.deleteMessage( id );
+            try {
+                return RedirectToAction( nameof( Messages ) );
+            } catch {
+                return View();
+            }
+        }
+
     }
 }

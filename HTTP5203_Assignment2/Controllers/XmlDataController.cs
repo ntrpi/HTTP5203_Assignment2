@@ -21,43 +21,74 @@ namespace HTTP5203_Assignment2.Controllers
             }
         }
 
-        public IEnumerable<XElement> getElementsWithName( string name )
+        // Return the first element if the enumerable is not empty, otherwise null.
+        public XElement getFirst( IEnumerable<XElement> elements )
         {
-            return root.Descendants( name );
+            if( elements.Count() > 0 ) {
+                return elements.First();
+            }
+            return null;
         }
 
+        // Get all the decendants with a given name from the root.
+        public IEnumerable<XElement> getElementsWithName( string name )
+        {
+            return getElementsWithName( root, name );
+        }
+
+        // Get all the decendants with a given name from the given parent element.
         public IEnumerable<XElement> getElementsWithName( XElement parent, string name )
         {
             return parent.Descendants( name );
         }
 
+        // Get the first decendant with a given name from the root or null.
         public XElement getElementWithName( string name )
         {
-            return getElementsWithName( name ).First();
+            return getFirst( getElementsWithName( name ) );
         }
 
+        // Get the first decendant with a given name from the given parent element or null.
         public XElement getElementWithName( XElement parent, string name )
         {
-            return getElementsWithName( parent, name ).First();
+            return getFirst( getElementsWithName( parent, name ) );
         }
 
-        public IEnumerable<XElement> getElementsWithChild( string parent, string child, string value )
+        // Get all the decendents of the root that have a child with the given name and value if passed in.
+        public IEnumerable<XElement> getElementsWithChild( string parentName, string childName, string childValue = null )
         {
-            return root
-                .Descendants( child )
-                .Where( c => c.Value == value )
-                .SelectMany( c => c.Ancestors( parent ) )
+            return getElementsWithChild( root, parentName, childName, childValue );
+        }
+
+        // Get all the decendents of the element that have a child with the given name and value if passed in.
+        public IEnumerable<XElement> getElementsWithChild( XElement ancestor, string parentName, string childName, string childValue = null )
+        {
+            IEnumerable<XElement> parents = ancestor.Descendants( parentName );
+            IEnumerable<XElement> children;
+            if( childValue == null ) {
+                children = parents.Elements( childName );
+            } else {
+                children = parents.Elements( childName ).Where( c => c.Value == childValue );
+            }
+            return children
+                .SelectMany( c => c.Ancestors( parentName ) )
                 .ToList();
         }
 
-        public IEnumerable<XElement> getElementsWithChild( string parent, string child )
+        // Get the first decendent of the root that has a child with the given name and value if passed in.
+        public XElement getElementWithChild( string parentName, string childName, string childValue = null )
         {
-            return root
-                .Descendants( child )
-                .SelectMany( c => c.Ancestors( parent ) )
-                .ToList();
+            return getFirst( getElementsWithChild( root, parentName, childName, childValue ) );
         }
 
+        // Get the first decendent of the element that has a child with the given name and value if passed in.
+        public XElement getElementWithChild( XElement ancestor, string parentName, string childName, string childValue = null )
+        {
+            return getFirst( getElementsWithChild( ancestor, parentName, childName, childValue ) );
+        }
+
+
+        // Create an element and add it to the root.
         public XElement addElement( string name )
         {
             XElement element = new XElement( name );
@@ -65,11 +96,26 @@ namespace HTTP5203_Assignment2.Controllers
             return element;
         }
 
-        public XElement getElementWithChildValue( string parentName, string elementName, string elementValue )
+        // Create an element with a given value and add it to the root.
+        public XElement addElement( string name, string value )
         {
-            return root.Descendants( parentName ).Elements( elementName ).Where( x => x.Value == elementValue ).First().Parent;
+            XElement element = new XElement( name );
+            element.SetValue( value );
+            root.Add( element );
+            return element;
         }
 
+        // Get the first element with parentName that has a child with childName and childValue, or null.
+        public XElement getElementWithChildValue( string parentName, string childName, string childValue )
+        {
+            IEnumerable<XElement> children = getElementsWithChild( parentName, childName, childValue );
+            if( children.Count() > 0 ) {
+                return children.First();
+            }
+            return null;
+        }
+
+        // Save the tree to the file.
         public void updateFile()
         {
             root.Save( fullPath );
