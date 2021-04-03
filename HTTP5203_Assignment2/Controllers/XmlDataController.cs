@@ -26,9 +26,19 @@ namespace HTTP5203_Assignment2.Controllers
             return root.Descendants( name );
         }
 
+        public IEnumerable<XElement> getElementsWithName( XElement parent, string name )
+        {
+            return parent.Descendants( name );
+        }
+
         public XElement getElementWithName( string name )
         {
             return getElementsWithName( name ).First();
+        }
+
+        public XElement getElementWithName( XElement parent, string name )
+        {
+            return getElementsWithName( parent, name ).First();
         }
 
         public IEnumerable<XElement> getElementsWithChild( string parent, string child, string value )

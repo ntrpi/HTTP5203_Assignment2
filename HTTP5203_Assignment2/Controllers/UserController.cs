@@ -14,7 +14,7 @@ namespace HTTP5203_Assignment2.Controllers
 {
     public class UserController: Controller
     {
-        private UserDataController data = new UserDataController();
+        private UserDataController data = UserDataController.getUserDataController();
 
         // GET: UserController
         public ActionResult Index()

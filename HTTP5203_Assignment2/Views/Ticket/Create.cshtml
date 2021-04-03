@@ -1,0 +1,45 @@
+﻿@model HTTP5203_Assignment2.Models.ViewModels.UpdateTicket
+
+<h4>Ticket</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="@Model.ticket.timestamp" class="control-label"></label>
+                <input asp-for="@Model.ticket.timestamp" name="timestamp" id="timestamp" class="form-control" />
+                <span asp-validation-for="@Model.ticket.timestamp" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+              <label asp-for="@Model.ticket.userId" class="control-label"></label>
+              @Html.DropDownList( "userId", new SelectList( Model.users.Distinct().ToList(), "userId", "name" ) )
+              <span asp-validation-for="@Model.ticket.userId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.ticket.subject" class="control-label"></label>
+                <input asp-for="@Model.ticket.subject" name="subject" id="subject" class="form-control" />
+                <span asp-validation-for="@Model.ticket.subject" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input asp-for="@Model.ticket.status" name="status" id="status" class="form-control" type="hidden" value="@HTTP5203_Assignment2.Models.Ticket.Status.open" />
+            </div>
+            <div class="form-group">
+              <label asp-for="@Model.ticket.productId" class="control-label"></label>
+              @Html.DropDownList( "productId", new SelectList( Model.products.Distinct().ToList(), "productId", "name" ) )
+              <span asp-validation-for="@Model.ticket.productId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

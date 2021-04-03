@@ -14,10 +14,10 @@ using System.Security.Cryptography;
 
 namespace HTTP5203_Assignment2.Controllers
 {
-    // Copied ferom https://www.c-sharpcorner.com/article/compute-sha256-hash-in-c-sharp/
-    // on 2021/04/02
     public class UserDataController: XmlDataController
     {
+        // Copied ferom https://www.c-sharpcorner.com/article/compute-sha256-hash-in-c-sharp/
+        // on 2021/04/02
         public static string getHashed( string rawData )
         {
             // Create a SHA256   
@@ -35,7 +35,9 @@ namespace HTTP5203_Assignment2.Controllers
         }
 
         private static int maxUserId;
-        public UserDataController() : base( "\\App_Data", "\\users.xml")
+        private static UserDataController userDataController;
+
+        private UserDataController() : base( "\\App_Data", "\\users.xml")
         {
             foreach( XElement e in getElementsWithName( "user" ) ) {
                 int userId = getUserId( e );
@@ -45,7 +47,15 @@ namespace HTTP5203_Assignment2.Controllers
             }
         }
 
-        private int getUserId( XElement element )
+        public static UserDataController getUserDataController()
+        {
+            if( userDataController == null ) {
+                userDataController = new UserDataController();
+            }
+            return userDataController;
+        }
+
+        public int getUserId( XElement element )
         {
             return (int) element.Element( "userId" );
         }
