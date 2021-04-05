@@ -7,6 +7,8 @@ using System.Web.Mvc;
 
 namespace HTTP5203_Assignment2.Models
 {
+    // Represents a message element in the xml, with a reference to the ticket to which 
+    // it belongs.
     public class Message
     {
         [Display( Name = "Message ID" )]

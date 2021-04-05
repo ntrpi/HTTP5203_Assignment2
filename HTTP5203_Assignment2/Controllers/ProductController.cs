@@ -31,6 +31,7 @@ namespace HTTP5203_Assignment2.Controllers
             return View();
         }
 
+        // A utility function to create a Product object using information from the collection.
         private Product getProductFromCollection( IFormCollection collection )
         {
             Product product = new Product();

@@ -11,12 +11,16 @@ namespace HTTP5203_Assignment2.Controllers
 {
     public class TicketDataController: XmlDataController
     {
+        // Use these to determine the ids for any new ticket/message.
         private static int maxTicketId;
         private static int maxMessageId;
+
+        // Use these controllers to interact with the XML.
         private static UserDataController userData = UserDataController.getUserDataController();
         private static ProductDataController productData = ProductDataController.getProductDataController();
-        private static TicketDataController ticketData;
 
+        // Make this a singleton.
+        private static TicketDataController ticketData;
         private TicketDataController() : base( "\\App_Data", "\\support.xml" )
         {
             foreach( XElement e in getElementsWithName( "ticket" ) ) {
@@ -68,6 +72,8 @@ namespace HTTP5203_Assignment2.Controllers
             };
         }
 
+        // A utility function to modify the element according to the values in 
+        // the Message object.
         private void modifyXml( XElement element, Message message )
         {
             if( message.messageId != 0 ) {
@@ -106,6 +112,7 @@ namespace HTTP5203_Assignment2.Controllers
             return newMessages;
         }
 
+        // Get all the messages for the ticket with the given id.
         public IEnumerable<Message> getMessages( int ticketId )
         {
             XElement ticket = getTicketElement( ticketId );
@@ -182,6 +189,9 @@ namespace HTTP5203_Assignment2.Controllers
             return tickets;
         }
 
+        // Show the tickets for a given user. The assumption is that if the user is 
+        // a customer, they will have created the ticket. If the user is support,
+        // they will have created a message in the ticket.
         public IEnumerable<Ticket> getTicketsForUser( int userId, User.UserType userType )
         {
             List<Ticket> tickets = new List<Ticket>();

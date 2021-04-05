@@ -7,6 +7,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace HTTP5203_Assignment2.Models
 {
+    // A User with an additional email property.
     public class Customer: User
     {
         private const string errorMessage = "Please enter a valid email address.";

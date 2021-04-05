@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 namespace HTTP5203_Assignment2.Models.ViewModels
 {
+    // A collection of object to help create the view for viewing the details of a ticket.
     public class ViewTicket
     {
         public Ticket ticket {

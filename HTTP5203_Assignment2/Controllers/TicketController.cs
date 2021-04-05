@@ -15,30 +15,32 @@ namespace HTTP5203_Assignment2.Controllers
         private static UserDataController userData = UserDataController.getUserDataController();
         private static ProductDataController productData = ProductDataController.getProductDataController();
 
-        // GET: TicketController
+        // GET: Ticket
         public ActionResult Index()
         {
             return View( data.getTickets() );
         }
 
-        private ViewTicket getViewTicket( int id )
+        // A utility function to create a ViewTicket object for the ticket with 
+        // the given id.
+        private ViewTicket getViewTicket( int ticketId )
         {
-            Ticket ticket = data.getTicket( id );
+            Ticket ticket = data.getTicket( ticketId );
             return new ViewTicket {
                 ticket = ticket,
                 user = userData.getUser( ticket.userId ),
-                messages = getViewMessages( id ),
+                messages = getViewMessages( ticketId ),
                 product = productData.getProduct( ticket.productId )
             };
         }
 
-        // GET: TicketController/Details/5
+        // GET: Ticket/Details/5
         public ActionResult Details( int id )
         {
             return View( getViewTicket( id ) );
         }
 
-        // GET: TicketController/Create
+        // GET: Ticket/Create
         public ActionResult Create()
         {
             UpdateTicket updateTicket = new UpdateTicket();
@@ -47,6 +49,7 @@ namespace HTTP5203_Assignment2.Controllers
             return View( updateTicket );
         }
 
+        // A utility function to create a Ticket object with the information from the collection.
         private Ticket getTicketFromCollection( IFormCollection collection )
         {
             Ticket ticket = new Ticket();
@@ -76,7 +79,7 @@ namespace HTTP5203_Assignment2.Controllers
         }
 
 
-        // POST: TicketController/Create
+        // POST: Ticket/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create( IFormCollection collection )
@@ -93,7 +96,7 @@ namespace HTTP5203_Assignment2.Controllers
             }
         }
 
-        // GET: TicketController/Edit/5
+        // GET: Ticket/Edit/5
         public ActionResult Edit( int id )
         {
             UpdateTicket updateTicket = new UpdateTicket();
@@ -103,7 +106,7 @@ namespace HTTP5203_Assignment2.Controllers
             return View( updateTicket );
         }
 
-        // POST: TicketController/Edit/5
+        // POST: Ticket/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit( int id, IFormCollection collection )
@@ -119,13 +122,13 @@ namespace HTTP5203_Assignment2.Controllers
             }
         }
 
-        // GET: TicketController/Delete/5
+        // GET: Ticket/DeleteConfirm/5
         public ActionResult DeleteConfirm( int id )
         {
             return View( data.getTicket( id ) );
         }
 
-        // POST: TicketController/Delete/5
+        // POST: Ticket/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete( int id, IFormCollection collection )
@@ -137,9 +140,11 @@ namespace HTTP5203_Assignment2.Controllers
             }
         }
 
-        private IEnumerable<ViewMessage> getViewMessages( int id )
+        // A utility function to create a list of ViewMessage objects for the 
+        // ticket with the given id.
+        private IEnumerable<ViewMessage> getViewMessages( int ticketId )
         {
-            IEnumerable<Message> messages = data.getMessages( id );
+            IEnumerable<Message> messages = data.getMessages( ticketId );
             List<ViewMessage> viewMessages = new List<ViewMessage>();
             foreach( Message m in messages ) {
                 viewMessages.Add( new ViewMessage {
@@ -150,17 +155,21 @@ namespace HTTP5203_Assignment2.Controllers
             return viewMessages;
         }
 
+        // GET: Ticket/Messages/5
         // id = ticket id
         public ActionResult Messages( int id )
         {
             return View( data.getMessages( id ) );
         }
 
+        // GET: Ticket/MessageDetails/?id=3&ticketId=5
         public ActionResult MessageDetails( int id, int ticketId )
         {
             return View( data.getMessage( id, ticketId ) );
         }
 
+        // GET: Ticket/CreateMessage/5
+        // id = ticket id
         public ActionResult CreateMessage( int id )
         {
             AddMessage addMessage = new AddMessage();
@@ -169,6 +178,7 @@ namespace HTTP5203_Assignment2.Controllers
             return View( addMessage );
         }
 
+        // Utility function to create a Message object using the information from the collection.
         private Message getMessageFromCollection( IFormCollection collection )
         {
             Message message = new Message();
@@ -196,6 +206,7 @@ namespace HTTP5203_Assignment2.Controllers
             return message;
         }
 
+        // POST: Ticket/CreateMessage
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult CreateMessage( IFormCollection collection )
@@ -211,11 +222,13 @@ namespace HTTP5203_Assignment2.Controllers
             }
         }
 
+        // POST: Ticket/EditMessage/?id=5&ticketId=9
         public ActionResult EditMessage( int id, int ticketId )
         {
             return View( data.getMessage( id, ticketId ) );
         }
 
+        // POST: Ticket/EditMessage/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult EditMessage( int id, IFormCollection collection )
@@ -232,12 +245,15 @@ namespace HTTP5203_Assignment2.Controllers
             }
         }
 
+        // POST: Ticket/DeleteMessageConfirm/5
         public ActionResult DeleteMessageConfirm( int id )
         {
             return View( data.getMessage( id ) );
         }
 
-       [HttpPost]
+        // POST: Ticket/DeleteMessage/5
+
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteMessage( int id, IFormCollection collection )
         {

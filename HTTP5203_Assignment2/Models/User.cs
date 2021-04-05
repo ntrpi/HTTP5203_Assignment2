@@ -8,6 +8,7 @@ using System.Web.Mvc;
 
 namespace HTTP5203_Assignment2.Models
 {
+    // Represents a user in the xml.
     public class User
     {
         public enum UserType

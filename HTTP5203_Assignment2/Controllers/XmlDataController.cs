@@ -10,7 +10,10 @@ namespace HTTP5203_Assignment2.Controllers
 {
     public class XmlDataController: Controller
     {
+        // The path to the xml file.
         private string fullPath;
+
+        // The root of the file.
         private XElement root;
         
         public XmlDataController( string path, string fileName )
@@ -75,6 +78,20 @@ namespace HTTP5203_Assignment2.Controllers
                 .ToList();
         }
 
+        // A somewhat clumsy way to get messages sent by a particular user. Basically, if you
+        // have xml that looks like this:
+        //<stuff>
+        //  <id>5</id>
+        //  <otherStuffWithId>
+        //    <otherStuff>
+        //      <id>32</id>
+        //    </otherStuff>
+        //    <otherStuff>
+        //      <id>33</id>
+        //    </otherStuff>
+        //  </otherStuffWithId>
+        //</stuff>
+        // and you want to get the stuff that has otherStuff with a particular id, you can use this.
         public IEnumerable<XElement> getGrandparents( string grandparentName, string parentName, string childName, string childValue = null )
         {
             IEnumerable<XElement> parents = root.Descendants( grandparentName )
@@ -92,11 +109,14 @@ namespace HTTP5203_Assignment2.Controllers
                 .ToList();
         }
 
+        // Use root as element to search from.
         public IEnumerable<XElement> getElementsWithDescendant( string parentName, string descendantName, string descendantValue = null )
         {
             return getElementsWithDescendant( root, parentName, descendantName, descendantValue );
         }
 
+        // Get elements that have a decendant with a particular child and optional value.
+        // This works great unless there are descendants on different levels with the same name.
         public IEnumerable<XElement> getElementsWithDescendant( XElement ancestor, string parentName, string descendantName, string descendantValue = null )
         {
             IEnumerable<XElement> parents = ancestor.Descendants( parentName );

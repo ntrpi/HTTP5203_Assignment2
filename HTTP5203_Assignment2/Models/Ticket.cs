@@ -7,6 +7,7 @@ using System.Web.Mvc;
 
 namespace HTTP5203_Assignment2.Models
 {
+    // Represents a ticket element in the xml.
     public class Ticket
     {
         public enum Status
@@ -19,6 +20,7 @@ namespace HTTP5203_Assignment2.Models
             closed = 2
         }
 
+        // Utility functions to convert the status type back and forth between int, type, and string.
         public static Status getStatus( string status )
         {
             return (Status) Enum.Parse( typeof( Status ), status, true );

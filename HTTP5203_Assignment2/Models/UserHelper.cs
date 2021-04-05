@@ -11,6 +11,7 @@ namespace HTTP5203_Assignment2.Models
     // There are too many conflicts with the VS User class, so this is required.
     public class UserHelper
     {
+        // Utility functions to convert the user type back and forth between int, type, and string.
         public static UserType getType( string type )
         {
             return (UserType) Enum.Parse( typeof( UserType ), type, true );
@@ -26,6 +27,7 @@ namespace HTTP5203_Assignment2.Models
             return getType( (UserType) userType );
         }
 
+        // Syntactic sugar to get the correct object.
         public static User getUserOfType( UserType userType )
         {
             if( userType == UserType.customer ) {
@@ -35,6 +37,7 @@ namespace HTTP5203_Assignment2.Models
             }
         }
 
+        // Yeah, that email property became quite a pain in the butt.
         public static void addEmail( User user, string email )
         {
             if( user is Customer ) {
@@ -50,6 +53,7 @@ namespace HTTP5203_Assignment2.Models
             return null;
         }
 
+        // Syntactic sugar.
         public static Customer getCustomer( User user )
         {
             if( user is Customer ) {

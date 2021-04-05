@@ -14,23 +14,19 @@ namespace HTTP5203_Assignment2.Controllers
 {
     public class UserController: Controller
     {
+        // Use these controllers to interact with the XML.
         private UserDataController data = UserDataController.getUserDataController();
         private TicketDataController ticketData = TicketDataController.getTicketDataController();
         private ProductDataController productData = ProductDataController.getProductDataController();
 
-        // GET: UserController
+        // GET: User
         public ActionResult Index()
         {
             return View( data.getUsers() );
         }
 
-        public ActionResult List( int id )
-        {
-            IEnumerable<Customer> customers = (IEnumerable<Customer>) data.getUsersByType( (User.UserType) id );
-            return View( customers );
-        }
-
-        public IEnumerable<ViewTicket> getViewTickets( User user )
+        // A utility function to create a list of ViewTickets for a given user.
+        private IEnumerable<ViewTicket> getViewTickets( User user )
         {
             List<ViewTicket> viewTickets = new List<ViewTicket>();
             IEnumerable<Ticket> tickets = ticketData.getTicketsForUser( user.userId, user.userType );
@@ -45,7 +41,7 @@ namespace HTTP5203_Assignment2.Controllers
 
 
 
-        // GET: UserController/Details/5
+        // GET: User/Details/5
         public ActionResult Details( int id )
         {
             User user = data.getUser( id );
@@ -54,12 +50,13 @@ namespace HTTP5203_Assignment2.Controllers
             return View( viewUser );
         }
 
-        // GET: UserController/Create
+        // GET: User/Create
         public ActionResult Create()
         {
             return View();
         }
 
+        // A utility function to create a User object using the information in the collection.
         private User getUserFromCollection( IFormCollection collection )
         {
             User user = null;
@@ -90,7 +87,7 @@ namespace HTTP5203_Assignment2.Controllers
             return user;
         }
 
-        // POST: UserController/Create
+        // POST: User/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create( IFormCollection collection )
@@ -111,20 +108,20 @@ namespace HTTP5203_Assignment2.Controllers
             }
         }
 
-        // GET: UserController/Edit/5
+        // GET: User/AddEmail/5
         public ActionResult AddEmail( int id )
         {
             User user = data.getUser( id );
             return View( user as Customer );
         }
 
-        // GET: UserController/Edit/5
+        // GET: User/Edit/5
         public ActionResult Edit( int id )
         {
             return View( data.getUser( id ) );
         }
 
-        // POST: UserController/Edit/5
+        // POST: User/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit( int id, IFormCollection collection )
@@ -147,13 +144,13 @@ namespace HTTP5203_Assignment2.Controllers
         }
 
 
-        // GET: UserController/Delete/5
+        // GET: User/DeleteConfirm/5
         public ActionResult DeleteConfirm( int id )
         {
             return View( ViewUser.getViewUser( data.getUser( id ) ) );
         }
 
-        // POST: UserController/Delete/5
+        // POST: User/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete( int id, IFormCollection collection )

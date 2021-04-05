@@ -34,7 +34,10 @@ namespace HTTP5203_Assignment2.Controllers
             }
         }
 
+        // Use this to determine the user id for any new users.
         private static int maxUserId;
+
+        // Make this a singleton.
         private static UserDataController userDataController;
 
         private UserDataController() : base( "\\App_Data", "\\users.xml")
@@ -47,6 +50,7 @@ namespace HTTP5203_Assignment2.Controllers
             }
         }
 
+        // Get the instance.
         public static UserDataController getUserDataController()
         {
             if( userDataController == null ) {
@@ -55,11 +59,13 @@ namespace HTTP5203_Assignment2.Controllers
             return userDataController;
         }
 
+        // Get the user id from the element.
         public int getUserId( XElement element )
         {
             return (int) element.Element( "userId" );
         }
 
+        // Create a User object from the element.
         User getUserFromXml( XElement userXml )
         {
             UserType userType = UserHelper.getType( userXml.Element( "userType" ).Value );
@@ -78,6 +84,7 @@ namespace HTTP5203_Assignment2.Controllers
             return user;
         }
 
+        // Get a list of User objects from the xml.
         public IEnumerable<User> getUsers()
         {
             List<User> users = new List<User>();
@@ -87,7 +94,9 @@ namespace HTTP5203_Assignment2.Controllers
             return users;
         }
 
-
+        // Get a list of User objects of a particular type.
+        // type == 3: 3 is not a valid user type, but is used here to indicate both
+        // service and admin types, i.e. not customers.
         public IEnumerable<User> getUsersByType( User.UserType type )
         {
             List<User> users = new List<User>();
@@ -109,21 +118,19 @@ namespace HTTP5203_Assignment2.Controllers
             return users;
         }
 
-        public Customer getCustomer( int userId )
-        {
-            return getUser( userId ) as Customer;
-        }
-
+        // Get a user object for the user with the given id.
         public User getUser( int userId )
         {
             return getUserFromXml( getUserElement( userId ) );
         }
 
+        // Syntactic sugar for the call to the base class.
         private XElement getUserElement( int userId )
         {
             return getElementWithChildValue( "user", "userId", userId.ToString() );
         }
 
+        // Modify the element according to the information in the User object.
         private void modifyXml( User user, XElement element )
         {
             // TODO: ID shouldn't change.
@@ -150,6 +157,7 @@ namespace HTTP5203_Assignment2.Controllers
             }
         }
 
+        // Update the xml with the information in the User object.
         public void updateUser( User user )
         {
             XElement element = getUserElement( user.userId );
@@ -157,6 +165,7 @@ namespace HTTP5203_Assignment2.Controllers
             updateFile();
         }
 
+        // Create a new user element with the information the User object.
         public int addUser( User user )
         {
             XElement element = addElement( "user" );
@@ -167,6 +176,7 @@ namespace HTTP5203_Assignment2.Controllers
             return user.userId;
         }
 
+        // Delete the user with the given id from the xml.
         public void deleteUser( int userId )
         {
             XElement element = getElementWithChildValue( "user", "userId", userId.ToString() );

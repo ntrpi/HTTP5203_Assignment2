@@ -12,9 +12,13 @@ namespace HTTP5203_Assignment2.Controllers
 {
     public class ProductDataController: XmlDataController
     {
+        // Use this to determine the product ID for any new products.
         private static int maxProductId;
+
+        // Use this to interact with the XML.
         private static ProductDataController productData;
 
+        // Make this a singleton.
         private ProductDataController() : base( "\\App_Data", "\\products.xml" )
         {
             foreach( XElement e in getElementsWithName( "product" ) ) {
@@ -44,7 +48,7 @@ namespace HTTP5203_Assignment2.Controllers
             return 0;
         }
 
-        // Get product XElement.
+        // Get the product XElement with the given id.
         private XElement getProductElement( int productId )
         {
             return getElementWithChildValue( "product", "productId", productId.ToString() );

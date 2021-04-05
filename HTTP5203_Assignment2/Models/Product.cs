@@ -7,6 +7,7 @@ using System.Web.Mvc;
 
 namespace HTTP5203_Assignment2.Models
 {
+    // Represents a product element in the xml.
     public class Product
     {
         [Display( Name = "Product ID" )]
