@@ -75,6 +75,43 @@ namespace HTTP5203_Assignment2.Controllers
                 .ToList();
         }
 
+        public IEnumerable<XElement> getGrandparents( string grandparentName, string parentName, string childName, string childValue = null )
+        {
+            IEnumerable<XElement> parents = root.Descendants( grandparentName )
+                .Descendants( parentName );
+            IEnumerable<XElement> children;
+            if( childValue == null ) {
+                children = parents.Descendants( childName );
+            } else {
+                children = parents.Descendants( childName ).Where( c => c.Value == childValue );
+            }
+            return children
+                .SelectMany( c => c.Ancestors( parentName ) )
+                .SelectMany( c => c.Ancestors( grandparentName ) )
+                .Distinct()
+                .ToList();
+        }
+
+        public IEnumerable<XElement> getElementsWithDescendant( string parentName, string descendantName, string descendantValue = null )
+        {
+            return getElementsWithDescendant( root, parentName, descendantName, descendantValue );
+        }
+
+        public IEnumerable<XElement> getElementsWithDescendant( XElement ancestor, string parentName, string descendantName, string descendantValue = null )
+        {
+            IEnumerable<XElement> parents = ancestor.Descendants( parentName );
+            IEnumerable<XElement> children;
+            if( descendantValue == null ) {
+                children = parents.Descendants( descendantName );
+            } else {
+                children = parents.Descendants( descendantName ).Where( c => c.Value == descendantValue );
+            }
+            return children
+                .SelectMany( c => c.Ancestors( parentName ) )
+                .ToList();
+        }
+
+
         // Get the first decendent of the root that has a child with the given name and value if passed in.
         public XElement getElementWithChild( string parentName, string childName, string childValue = null )
         {

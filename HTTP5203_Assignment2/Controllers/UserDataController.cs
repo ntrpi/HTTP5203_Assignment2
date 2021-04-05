@@ -87,6 +87,7 @@ namespace HTTP5203_Assignment2.Controllers
             return users;
         }
 
+
         public IEnumerable<User> getUsersByType( User.UserType type )
         {
             List<User> users = new List<User>();
@@ -106,6 +107,11 @@ namespace HTTP5203_Assignment2.Controllers
                 }
             }
             return users;
+        }
+
+        public Customer getCustomer( int userId )
+        {
+            return getUser( userId ) as Customer;
         }
 
         public User getUser( int userId )

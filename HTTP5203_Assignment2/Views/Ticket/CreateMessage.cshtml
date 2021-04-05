@@ -1,0 +1,93 @@
+﻿@model HTTP5203_Assignment2.Models.ViewModels.AddMessage
+
+<h4>Message</h4>
+<hr />
+<dl class="row">
+  <dt class="col-sm-2">
+    @Html.DisplayNameFor( model => Model.viewTicket.ticket.ticketId )
+  </dt>
+  <dd class="col-sm-10">
+    @Html.DisplayFor( model => Model.viewTicket.ticket.ticketId )
+  </dd>
+  <dt class="col-sm-2">
+    @Html.DisplayNameFor( model => Model.viewTicket.ticket.timestamp )
+  </dt>
+  <dd class="col-sm-10">
+    @Html.DisplayFor( model => Model.viewTicket.ticket.timestamp )
+  </dd>
+  <dt class="col-sm-2">
+    @Html.DisplayNameFor( model => Model.viewTicket.user.name )
+  </dt>
+  <dd class="col-sm-10">
+    @Html.DisplayFor( model => Model.viewTicket.user.name )
+  </dd>
+  <dt class="col-sm-2">
+    @Html.DisplayNameFor( model => Model.viewTicket.ticket.subject )
+  </dt>
+  <dd class="col-sm-10">
+    @Html.DisplayFor( model => Model.viewTicket.ticket.subject )
+  </dd>
+  <dt class="col-sm-2">
+    @Html.DisplayNameFor( model => Model.viewTicket.ticket.status )
+  </dt>
+  <dd class="col-sm-10">
+    @Html.DisplayFor( model => Model.viewTicket.ticket.status )
+  </dd>
+  <dt class="col-sm-2">
+    @Html.DisplayNameFor( model => Model.viewTicket.product.name )
+  </dt>
+  <dd class="col-sm-10">
+    @Html.DisplayFor( model => Model.viewTicket.product.name )
+  </dd>
+</dl>
+<hr />
+<h5>Messages</h5>
+<div class="container overflow-auto mb-3" style="max-height: 1000px">
+  @foreach( var item in Model.viewTicket.messages ) {
+    <div class="container bg-light m-2">
+      <div class="d-flex justify-content-between">
+        <small>
+          @Html.DisplayFor( modelItem => item.user.name )
+        </small>
+        @Html.ActionLink( "[i]", "MessageDetails", new {
+          id = item.message.messageId,
+          ticketId = item.message.ticketId
+        } )
+      </div>
+      @Html.DisplayFor( modelItem => item.message.content )
+    </div>
+  }
+</div>
+
+<div class="row">
+  <div class="col-md-4 bg-light">
+    <h6>New Message</h6>
+    <form asp-action="CreateMessage">
+      <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+      <div class="form-group">
+        <label asp-for="@Model.viewTicket.ticket.userId" class="control-label"></label>
+        @Html.DropDownList( "userId", new SelectList( Model.users.Distinct().ToList(), "userId", "name" ) )
+        <span asp-validation-for="@Model.viewTicket.ticket.userId" class="text-danger"></span>
+      </div>
+      <div class="form-group">
+        <label asp-for="@Model.message.content" class="control-label"></label>
+        <input asp-for="@Model.message.content" name="content" class="form-control" />
+        <span asp-validation-for="@Model.message.content" class="text-danger"></span>
+      </div>
+      <div class="form-group">
+        <input type="hidden" asp-for="@Model.viewTicket.ticket.ticketId" name="ticketId" value="@Model.viewTicket.ticket.ticketId" class="form-control" />
+      </div>
+      <div class="form-group">
+        <input type="submit" value="Send" class="btn btn-primary" />
+      </div>
+    </form>
+  </div>
+</div>
+
+<div>
+  <a asp-action="Details" asp-route-id="@Model.viewTicket.ticket.ticketId">Back to Ticket</a>
+</div>
+
+@section Scripts {
+  @{await Html.RenderPartialAsync( "_ValidationScriptsPartial" );}
+}

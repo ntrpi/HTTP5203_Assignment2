@@ -57,13 +57,14 @@ namespace HTTP5203_Assignment2.Controllers
 
         // Get the message id from the element.
         // Create a Message object from the element.
-        public Message getMessageFromXml( XElement messageXml )
+        public Message getMessageFromXml( XElement messageXml, int ticketId = 0 )
         {
             return new Message {
                 messageId = (int) messageXml.Element( "messageId" ),
                 timestamp = (DateTime) messageXml.Element( "timestamp" ),
                 userId = (int) messageXml.Element( "userId" ),
-                content = messageXml.Element( "content" ).Value
+                content = messageXml.Element( "content" ).Value,
+                ticketId = ticketId
             };
         }
 
@@ -116,7 +117,7 @@ namespace HTTP5203_Assignment2.Controllers
         {
             XElement message = getMessageXml( messageId, ticketId );
             if( message != null ) {
-                return getMessageFromXml( message );
+                return getMessageFromXml( message, ticketId );
             }
             return null;
         }
@@ -176,6 +177,21 @@ namespace HTTP5203_Assignment2.Controllers
         {
             List<Ticket> tickets = new List<Ticket>();
             foreach( XElement e in getElementsWithName( "ticket" ) ) {
+                tickets.Add( getTicketFromXml( e ) );
+            }
+            return tickets;
+        }
+
+        public IEnumerable<Ticket> getTicketsForUser( int userId, User.UserType userType )
+        {
+            List<Ticket> tickets = new List<Ticket>();
+            IEnumerable<XElement> elements;
+            if( UserHelper.isCustomer( userType ) ) {
+                elements = getElementsWithChild( "ticket", "userId", userId.ToString() );
+            } else {
+                elements = getGrandparents( "ticket", "message", "userId", userId.ToString() );
+            }
+            foreach( XElement e in elements ) {
                 tickets.Add( getTicketFromXml( e ) );
             }
             return tickets;

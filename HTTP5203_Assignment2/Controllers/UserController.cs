@@ -15,6 +15,8 @@ namespace HTTP5203_Assignment2.Controllers
     public class UserController: Controller
     {
         private UserDataController data = UserDataController.getUserDataController();
+        private TicketDataController ticketData = TicketDataController.getTicketDataController();
+        private ProductDataController productData = ProductDataController.getProductDataController();
 
         // GET: UserController
         public ActionResult Index()
@@ -28,17 +30,27 @@ namespace HTTP5203_Assignment2.Controllers
             return View( customers );
         }
 
+        public IEnumerable<ViewTicket> getViewTickets( User user )
+        {
+            List<ViewTicket> viewTickets = new List<ViewTicket>();
+            IEnumerable<Ticket> tickets = ticketData.getTicketsForUser( user.userId, user.userType );
+            foreach( Ticket t in tickets ) {
+                viewTickets.Add( new ViewTicket {
+                    ticket = t,
+                    product = productData.getProduct( t.productId )
+                } );
+            }
+            return viewTickets;
+        }
+
+
+
         // GET: UserController/Details/5
         public ActionResult Details( int id )
         {
             User user = data.getUser( id );
-            ViewUser viewUser = new ViewUser {
-                user = user
-            };
-            
-            if( user.userType ==  UserType.customer ) {
-                viewUser.email = ( user as Customer ).email;
-            }
+            ViewUser viewUser = ViewUser.getViewUser( user );
+            viewUser.tickets = getViewTickets( user );
             return View( viewUser );
         }
 

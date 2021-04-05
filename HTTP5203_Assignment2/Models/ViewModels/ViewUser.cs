@@ -22,5 +22,10 @@ namespace HTTP5203_Assignment2.Models.ViewModels
         public string email {
             get; set;
         }
+
+        [Display( Name = "Tickets" )]
+        public IEnumerable<ViewTicket> tickets {
+            get; set;
+        }
     }
 }

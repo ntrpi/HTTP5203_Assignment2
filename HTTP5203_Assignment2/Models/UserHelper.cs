@@ -62,5 +62,10 @@ namespace HTTP5203_Assignment2.Models
         {
             return user.userType == UserType.customer;
         }
+
+        public static bool isCustomer( UserType userType )
+        {
+            return userType == UserType.customer;
+        }
     }
 }

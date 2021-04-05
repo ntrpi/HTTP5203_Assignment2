@@ -21,14 +21,21 @@ namespace HTTP5203_Assignment2.Controllers
             return View( data.getTickets() );
         }
 
+        private ViewTicket getViewTicket( int id )
+        {
+            Ticket ticket = data.getTicket( id );
+            return new ViewTicket {
+                ticket = ticket,
+                user = userData.getUser( ticket.userId ),
+                messages = getViewMessages( id ),
+                product = productData.getProduct( ticket.productId )
+            };
+        }
+
         // GET: TicketController/Details/5
         public ActionResult Details( int id )
         {
-            ViewTicket viewTicket = new ViewTicket();
-            viewTicket.ticket = data.getTicket( id );
-            viewTicket.user = userData.getUser( viewTicket.ticket.userId );
-            viewTicket.messages = getViewMessages( id );
-            return View( viewTicket );
+            return View( getViewTicket( id ) );
         }
 
         // GET: TicketController/Create
@@ -149,14 +156,17 @@ namespace HTTP5203_Assignment2.Controllers
             return View( data.getMessages( id ) );
         }
 
-        public ActionResult MessageDetails( int id )
+        public ActionResult MessageDetails( int id, int ticketId )
         {
-            return View( data.getMessage( id ) );
+            return View( data.getMessage( id, ticketId ) );
         }
 
-        public ActionResult CreateMessage()
+        public ActionResult CreateMessage( int id )
         {
-            return View();
+            AddMessage addMessage = new AddMessage();
+            addMessage.viewTicket = getViewTicket( id );
+            addMessage.users = userData.getUsersByType( (Models.User.UserType) 3 );
+            return View( addMessage );
         }
 
         private Message getMessageFromCollection( IFormCollection collection )
@@ -165,7 +175,12 @@ namespace HTTP5203_Assignment2.Controllers
             if( collection.ContainsKey( "messageId" ) ) {
                 message.messageId = Int32.Parse( collection[ "messageId" ] );
             }
-            message.timestamp = DateTime.Now;
+
+            if( collection.ContainsKey( "timestamp" ) ) {
+                message.timestamp = DateTime.Parse( collection[ "timestamp" ] );
+            } else {
+                message.timestamp = DateTime.Now;
+            }
 
             if( collection.ContainsKey( "userId" ) ) {
                 message.userId = Int32.Parse( collection[ "userId" ] );
@@ -188,7 +203,7 @@ namespace HTTP5203_Assignment2.Controllers
             Message message = getMessageFromCollection( collection );
             message.messageId = data.addMessage( message );
             try {
-                return RedirectToAction( nameof( Messages ), new {
+                return RedirectToAction( nameof( Details ), new {
                     id = message.ticketId
                 } );
             } catch {
@@ -196,9 +211,9 @@ namespace HTTP5203_Assignment2.Controllers
             }
         }
 
-        public ActionResult EditMessage( int id )
+        public ActionResult EditMessage( int id, int ticketId )
         {
-            return View( data.getMessage( id ) );
+            return View( data.getMessage( id, ticketId ) );
         }
 
         [HttpPost]
@@ -209,7 +224,8 @@ namespace HTTP5203_Assignment2.Controllers
             message.messageId = data.updateMessage( message );
             try {
                 return RedirectToAction( nameof( MessageDetails ), new {
-                    id = message.messageId
+                    id = message.messageId,
+                    ticketId = message.ticketId
                 } );
             } catch {
                 return View();

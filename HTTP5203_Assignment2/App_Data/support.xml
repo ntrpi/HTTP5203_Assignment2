@@ -1,12 +1,18 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <tickets>
   <ticket>
     <ticketId>1001</ticketId>
-    <timestamp>2011.03.20 11:35</timestamp>
+    <timestamp>03/20/2011 11:35</timestamp>
     <userId>1</userId>
     <productId>124</productId>
     <subject>Tear in hem.</subject>
-    <status>open</status>
+    <status>investigating</status>
+    <message>
+      <messageId>506</messageId>
+      <userId>4567</userId>
+      <timestamp>2021-04-04 10:26:02 PM</timestamp>
+      <content>I'm sorry to hear that, Harry. Would you like a refund or an exchange?</content>
+    </message>
   </ticket>
   <ticket>
     <ticketId>1002</ticketId>
@@ -18,7 +24,7 @@
     <messages>
       <message>
         <messageId>501</messageId>
-        <timestamp>2011.03.22 11:34</timestamp>
+        <timestamp>2021-04-04 9:41:37 PM</timestamp>
         <userId>2565</userId>
         <content>Hello, Ron, how can I help you?</content>
       </message>
@@ -26,13 +32,13 @@
         <messageId>502</messageId>
         <timestamp>2011.03.22 11:35</timestamp>
         <userId>2</userId>
-        <content>Yes, I was expecting my frog to jump away and it didn&#x27;t.</content>
+        <content>Yes, I was expecting my frog to jump away and it didn't.</content>
       </message>
       <message>
         <messageId>503</messageId>
         <timestamp>2011.03.22 11:36</timestamp>
         <userId>2565</userId>
-        <content>Does it really matter since you&#x27;re going to eat it?</content>
+        <content>Does it really matter since you're going to eat it?</content>
       </message>
       <message>
         <messageId>504</messageId>
@@ -44,7 +50,7 @@
         <messageId>505</messageId>
         <timestamp>2011.03.22 11:38</timestamp>
         <userId>2565</userId>
-        <content>You&#x27;re welcome. Enjoy your frog!</content>
+        <content>You're welcome. Enjoy your frog!</content>
       </message>
     </messages>
   </ticket>
